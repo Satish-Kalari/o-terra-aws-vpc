@@ -1,5 +1,5 @@
 data "aws_availability_zones" "azs" {
-    #all_availability_zones = true 
+    #all_availability_zones = true # available zone is alreday given in provider.tf 
     state = "available"     
 }
 

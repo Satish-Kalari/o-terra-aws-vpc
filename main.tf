@@ -22,8 +22,8 @@ resource "aws_internet_gateway" "gw" {
 }
 
 resource "aws_subnet" "public" {
-    count = length(var.public_subnets_cidr)
-    vpc_id = aws_vpc.main.id
+    count = length(var.public_subnets_cidr) #length function, when creating more than one subnet
+    vpc_id = aws_vpc.main.id # Need VPC ID in which we need to create subnets
     cidr_block = var.public_subnets_cidr[count.index]
     availability_zone = local.az_names[count.index]
 
@@ -66,7 +66,14 @@ resource "aws_subnet" "database" {
     )
 }
 
+resource "aws_db_subnet_group" "default" {
+  name       = local.name
+  subnet_ids = aws_subnet.database[*].id 
 
+  tags = {
+    Name = local.name
+  }
+}
 
 resource "aws_eip" "eip" {
     domain = "vpc"  
